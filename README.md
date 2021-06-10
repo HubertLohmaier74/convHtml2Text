@@ -1,4 +1,5 @@
 # convHtml2Text
-Convert HTML to plain text
+
+Converts HTML to plain text keeping only text between TAGs.
 
 Read index.php for quite simple explanation...

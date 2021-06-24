@@ -36,31 +36,36 @@ class convHtml2Text {
 	
 	
 	// -------------------------------------------------------------
-	// Call this function to eliminate all empty lines besides that
-	// preceeding a data line
+	// Call this function to eliminate all empty lines 
+	// (besides those preceeding a line of data)
 	// -------------------------------------------------------------
 	public function keepOnly1EmptyLine() {
 		$squeezed_text = array();
-		$lines = explode("\r\n", $this->html);
+//		$lines = explode("\r\n", $this->html);
+		$lines = explode(_REPLACER_, $this->html);
 		$cnt = 0;
+
 		foreach ($lines As $line) {
-			$nextline = trim($lines[$cnt+1]);
-			// 1) line empty but next isnt => keep empty line
-			if ( trim($line) == _REPLACER_ && trim($nextline) != _REPLACER_ ) {
-				$squeezed_text[] = $line;
-//				echo "<br>AWAITING DATA IN NEXT LINE: KEEP EMPTY LINE BEFORE";
-			}
-			// 2) and keep all text
-			else if ($line != _REPLACER_) { 
-				// skip all line breaks at end of line
-				if (substr($line, strlen($line)-strlen(_REPLACER_)) == _REPLACER_)
-					$line = substr($line, 0, strlen($line)-strlen(_REPLACER_));
-				
-				if (trim($line) != "")
+			if ( count($lines) > $cnt+1 ) {
+				$nextline = trim($lines[$cnt+1]);
+				// 1) line empty but next isnt => keep empty line
+				if ( trim($line) == _REPLACER_ && trim($nextline) != _REPLACER_ ) {
 					$squeezed_text[] = $line;
-//				echo "<br>DATA: $line";
-			}
-			$cnt++;
+	//				echo "<br>AWAITING DATA IN NEXT LINE: KEEP EMPTY LINE BEFORE";
+				}
+				// 2) and keep all text
+				else if ($line != _REPLACER_) { 
+					// skip all line breaks at end of line
+					if (substr($line, strlen($line)-strlen(_REPLACER_)) == _REPLACER_)
+						$line = substr($line, 0, strlen($line)-strlen(_REPLACER_));
+					
+					if (trim($line) != "")
+						$squeezed_text[] = $line;
+	//				echo "<br>DATA: $line";
+				}
+				$cnt++;
+			} 
+			else break;
 		}
 		
 		return implode("\r\n", $squeezed_text);	
